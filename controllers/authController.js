@@ -1,6 +1,7 @@
 import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 
+// register user
 export const register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -20,6 +21,26 @@ export const register = async (req, res) => {
         });
         res.json({message: "User registered successfully"});
 
+    }catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+// login user
+export const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        // check if user exists
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ error: "User does not exist" });
+        }
+        // check if password is correct
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ error: "Invalid credentials" });
+        }
+        res.json({message: "User logged in successfully"});
     }catch (error) {
         res.status(500).json({ error: error.message });
     }

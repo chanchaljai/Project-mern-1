@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required"],
       minlength: 6,
-      select: false, // security: by default password fetch nahi hoga
     },
   },
   {
